@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sweetel.mapper.MemberMapper">
+<!-- namespace : 자바클래스에서 mapper 를 찾는 경로
+				  다른 mapper와 중복되지 않도록 네임스페이스 기재 
+
+** Mybatis
+	=> PreparedStatement 처리가 기본
+	=> 자동으로 DB close() 해줌
+	
+** #{id}
+ => parameter로 전달된 vo 의 id 라는 컬럼의 value 가 전달됨
+ => getID() or setID("..") : getter 또는 setter 에 오타가 없어야함 
+ => Map 타입의 경우 키값이 id 인 값을 찾음   
+ 
+** ${id} : id 라는 필드 표현 
+ 
+** SQL 쿼리문에서 비교연산자 사용하는 경우  
+	XML에서는  <,>등 비교연산자의 경우 XML규칙상 에러 나기때문에,
+	이기호를 연산자로 인식하도록 하기 위해서는 SQL문을 CDATA로 묶어 주어야 한다.
+	<![CDATA[ SELECT * FROM table WHERE id > 1 ]]> 
+-->
+
+	<select id="selectList" resultType="vo.MemberVO">
+		select * from member where id != 'admin' order by id
+	</select>
+	
+	<select id="selectOne" resultType="vo.MemberVO">
+		select * from sweetelmember where id = #{id}
+	</select>
+	<!-- #{id} : parameter 로 전달된 vo 의 id 라는 컬럼의 value 가 전달됨 -->
+
+	<insert id="insert">
+		 INSERT INTO sweetelmember ( id ,pw ,email,name,phonenum, cdate ) VALUES ( #{id},#{pw},#{email},#{name},#{phonenum},to_char(sysdate,'YYYY-MM-DD HH24:MM:SS'))
+	</insert>
+	
+	<update id="update">
+		update member set password=#{password}, name=#{name}, lev=#{lev}, birthd=#{birthd}
+		, point=#{point}, weight=#{weight}, rid=#{rid}, uploadfile=#{uploadfile} where id=#{id}
+	</update>
+	
+	<delete id="delete">
+		delete from member where id=#{id}	
+	</delete>
+
+</mapper>  
